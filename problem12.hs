@@ -1,13 +1,12 @@
-divisors n = filter (\x -> rem n x == 0) [1..n]
-numDivisors = length.divisors
+import Math.NumberTheory.Primes.Factorisation
 
-triangleNumber:: Integral a => Int -> a
-triangleNumber 1 = 1
-triangleNumber n = (fromIntegral n) + (triangleNumber (n-1))
+factorCounts = (map snd).factorise
+numDivisors = product.(map (+1)).factorCounts
 
-triangleNumbers = map triangleNumber [1..]
+triangleNumbers = scanl (+) 1 [2..]
 
-firstWithNDivisors:: Integral a => Int -> [a] -> a
-firstWithNDivisors n nums = head $ dropWhile (\x -> (length $ divisors x) < n) nums 
 
-main = putStrLn $ show $ numDivisors (1*2*3*4*5)
+firstWithNDivisors:: Int -> [Integer] -> Integer
+firstWithNDivisors n nums = head $ dropWhile (\x -> numDivisors x < n) nums 
+
+main = putStrLn $ show $ firstWithNDivisors 500 triangleNumbers
