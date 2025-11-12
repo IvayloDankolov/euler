@@ -1,0 +1,1 @@
+sum(int(digit) for digit in str(pow(2, 1000)))
