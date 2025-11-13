@@ -49,6 +49,13 @@ export function memoize_integer(fn: (n: number) => number, initial_size: number)
 }
 
 export namespace Gen {
+
+    export function* map<T, U>(gen: Generator<T>, fn: (val: T) => U): Generator<U> {
+        for (let val of gen) {
+            yield fn(val);
+        }
+    }
+
     export function* filter<T>(gen: Generator<T>, predicate: (val: T) => boolean): Generator<T> {
         for (let val of gen) {
             if (predicate(val)) {
@@ -65,6 +72,15 @@ export namespace Gen {
         return acc;
     }
 
+    export function some<T>(gen: Generator<T>, predicate: (val: T) => boolean): boolean {
+        for (let val of gen) {
+            if (predicate(val)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     export function sum(gen: Generator<number>): number {
         return reduce(gen, (acc, val) => acc + val, 0);
     }
@@ -76,7 +92,7 @@ export namespace Gen {
     }
 
     export function* divisors(n: number): Generator<number> {
-        yield 1;
+        if(n > 1) yield 1;
         const limit = Math.floor(Math.sqrt(n));
         for (let i of range(2, limit + 1)) {
             if (n % i === 0) {

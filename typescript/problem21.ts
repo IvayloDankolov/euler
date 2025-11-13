@@ -1,19 +1,8 @@
-import { Gen, memoize_integer } from "./utils";
-
-function sumOfDivisors(n: number): number {
-    const ds = Gen.divisors(n);
-    return Gen.sum(ds);
-}
-
-const memoSOD = memoize_integer(sumOfDivisors, 1024);
-
-function isAmicable(n: number): boolean {
-    const neighbor = memoSOD(n);
-    return neighbor !== n && memoSOD(neighbor) === n;
-}
+import { Num } from "./math";
+import { Gen } from "./utils";
 
 const INPUT = 10000;
 
-const allAmicable = Gen.filter(Gen.range(1, INPUT), isAmicable);
+const allAmicable = Gen.filter(Gen.range(1, INPUT), Num.isAmicable);
 
 console.log(Gen.sum(allAmicable));
