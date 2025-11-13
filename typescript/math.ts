@@ -2,6 +2,10 @@ import { Gen, memoize_integer } from "./utils";
 
 const INITIAL_BUFFER_SIZE = 10000;
 
+export function factorial(n: number) {
+    return Gen.reduce(Gen.range(1, n + 1), (acc, x) => acc * x, 1);
+}
+
 export namespace Num {
 
     export const sumOfDivisors = memoize_integer((n: number) => {
