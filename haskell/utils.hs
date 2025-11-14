@@ -11,10 +11,15 @@ subsequencesOfSize n xs = let l = length xs
 
 sublistsOfSize :: Int -> [a] -> [[a]]
 sublistsOfSize 0 _ = [[]]
-sublistsOfSize n xs 
+sublistsOfSize n xs
     | length xs < n = []
-    | otherwise     = sublistIterator (fst splits) (snd splits)
+    | otherwise     = uncurry sublistIterator splits
     where
         splits = splitAt n xs
         sublistIterator curr [] = [curr]
         sublistIterator curr (x:xs) = curr : sublistIterator (tail curr ++ [x]) xs
+
+digits:: Integral a => a -> [a]
+digits 0 = []
+digits n = digits q ++ [r]
+    where (q,r) = n `divMod` 10
