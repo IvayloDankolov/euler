@@ -1,19 +1,7 @@
 #include <vector>
 #include <iostream>
 
-void populate_sieve(std::vector<bool>& is_prime, int total) {
-    is_prime.resize(total + 1, true);
-    is_prime[0] = false;
-    is_prime[1] = false;
-
-    for (int i = 2; 2 * i <= total; ++i) {
-        if (is_prime[i]) {
-            for (int j = 2 * i; j <= total; j += i) {
-                is_prime[j] = false;
-            }
-        }
-    }
-}
+#include "utils.cpp"
 
 int quadratic_consec_primes(int a, int b, const std::vector<bool>& is_prime) {
     /*
@@ -36,9 +24,7 @@ int main() {
 
     int total_primes = 6 * 1000000; // I don't think we'll need quite that many but C++ goes brrr
 
-    std::vector<bool> is_prime;
-
-    populate_sieve(is_prime, total_primes);
+    std::vector<bool> is_prime = prime_sieve(total_primes);
 
     int max_consec = 0;
     int max_a = 0;
