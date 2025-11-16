@@ -23,3 +23,8 @@ digits:: Integral a => a -> [a]
 digits 0 = []
 digits n = digits q ++ [r]
     where (q,r) = n `divMod` 10
+
+digitsR:: Integral a => a -> [a]
+digitsR 0 = []
+digitsR n = r : digitsR q
+    where (q,r) = n `divMod` 10

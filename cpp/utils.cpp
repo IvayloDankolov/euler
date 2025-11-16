@@ -1,19 +1,50 @@
 #include <vector>
 
+int MIN_SIEVE_SIZE = 1000000;
 
-std::vector<bool> prime_sieve(int total) {
-    std::vector<bool> is_prime(total + 1, true);
+class PrimeSieve
+{
+private:
+    std::vector<bool> is_prime;
 
-    is_prime[0] = false;
-    is_prime[1] = false;
+    void extend_sieve(int new_size)
+    {
+        if (new_size <= is_prime.size())
+        {
+            return;
+        }
+        new_size = std::max(new_size, MIN_SIEVE_SIZE);
+        int current_size = is_prime.size();
+        is_prime.resize(new_size, true);
 
-    for (int i = 2; 2 * i <= total; ++i) {
-        if (is_prime[i]) {
-            for (int j = 2 * i; j <= total; j += i) {
+        is_prime[0] = is_prime[1] = false;
+
+
+        for (int i = 2; 2 * i < new_size; ++i)
+        {
+            if (!is_prime[i])
+            {
+                continue;
+            }
+            int start = std::max(current_size - (current_size % i) + i, i * 2);
+            for (int j = start; j < new_size; j += i)
+            {
                 is_prime[j] = false;
             }
         }
     }
-    
-    return is_prime;
-}
+
+public:
+    PrimeSieve(int initial_size = MIN_SIEVE_SIZE)
+    {
+        is_prime = std::vector<bool>();
+        extend_sieve(initial_size);
+    }
+
+    bool check(int n) {
+        if(n >= is_prime.size()) {
+            extend_sieve(n * 2);
+        }
+        return is_prime[n];
+    }
+};

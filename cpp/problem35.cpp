@@ -3,12 +3,12 @@
 
 const int TOTAL_PRIMERS = 1000000;
 
-bool is_circular_prime(int n, const std::vector<bool>& is_prime) {
+bool is_circular_prime(int n, PrimeSieve& primes) {
     int digits = floor(log10(n)) + 1;
     int firstDigitMultiplier = pow(10, digits - 1);
     int curr = n;
     do {
-        if(!is_prime[curr]) {
+        if(!primes.check(curr)) {
             return false;
         }
         /*
@@ -24,11 +24,11 @@ bool is_circular_prime(int n, const std::vector<bool>& is_prime) {
 }
 
 int main() {
-    std::vector<bool> is_prime = prime_sieve(TOTAL_PRIMERS);
+    auto primes = PrimeSieve(TOTAL_PRIMERS);
 
     int count = 0;
     for(int i = 2; i < TOTAL_PRIMERS; ++i) {
-        if(is_circular_prime(i, is_prime)) {
+        if(is_circular_prime(i, primes)) {
             ++count;
         }
     }

@@ -3,7 +3,7 @@
 
 #include "utils.cpp"
 
-int quadratic_consec_primes(int a, int b, const std::vector<bool>& is_prime) {
+int quadratic_consec_primes(int a, int b, PrimeSieve& primes) {
     /*
     (n+1) ^ 2 + a * (n+1) + b = n^2 + 2n + 1 + a*n + a + b
         = n^2 + a*n + b + 2n + a + 1
@@ -13,7 +13,7 @@ int quadratic_consec_primes(int a, int b, const std::vector<bool>& is_prime) {
     */
     int n = 0;
     int fn = b;
-    while(is_prime[fn]) {      
+    while(primes.check(fn)) {      
         fn += 2 * n + a + 1;
         ++n;
     }
@@ -24,14 +24,14 @@ int main() {
 
     int total_primes = 6 * 1000000; // I don't think we'll need quite that many but C++ goes brrr
 
-    std::vector<bool> is_prime = prime_sieve(total_primes);
+    auto primes = PrimeSieve(total_primes);
 
     int max_consec = 0;
     int max_a = 0;
     int max_b = 0;
     for(int a = -999; a < 1000; ++a) {
         for(int b = -1000; b <= 1000; ++b) {
-            int consec = quadratic_consec_primes(a, b, is_prime);
+            int consec = quadratic_consec_primes(a, b, primes);
             if(consec > max_consec) {
                 max_consec = consec;
                 max_a = a;
