@@ -85,6 +85,19 @@ export namespace Gen {
         return reduce(gen, (acc, val) => acc + val, 0);
     }
 
+    export function maxBy<T>(gen: Generator<T>, fn: (val: T) => number): T | null {
+        let maxVal: T | null = null;
+        let maxKey: number | null = null;
+        for (let val of gen) {
+            const key = fn(val);
+            if (maxKey === null || key > maxKey) {
+                maxKey = key;
+                maxVal = val;
+            }
+        }
+        return maxVal;
+    }
+
     export function* range(start: number, end: number): Generator<number> {
         for (let i = start; i < end; i++) {
             yield i;
@@ -102,5 +115,33 @@ export namespace Gen {
                 }
             }
         }
+    }
+}
+
+
+export namespace It {
+    type IterableOrIterator<T> = Iterable<T> | Iterator<T>;
+    function getIterator<T>(iterableOrIterator: IterableOrIterator<T>): Iterator<T> {
+        if (Symbol.iterator in iterableOrIterator) {
+            return (iterableOrIterator as Iterable<T>)[Symbol.iterator]();
+        }
+        return iterableOrIterator as Iterator<T>;
+    }
+    
+    export function maxBy<T>(it: IterableOrIterator<T>, fn: (val: T) => number): T | null {
+        const iterator = getIterator(it);
+        let maxVal: T | null = null;
+        let maxKey: number | null = null;
+        let result = iterator.next();
+        while (!result.done) {
+            const val = result.value;
+            const key = fn(val);
+            if (maxKey === null || key > maxKey) {
+                maxKey = key;
+                maxVal = val;
+            }
+            result = iterator.next();
+        }
+        return maxVal;
     }
 }
