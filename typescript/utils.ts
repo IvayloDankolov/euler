@@ -144,4 +144,26 @@ export namespace It {
         }
         return maxVal;
     }
+
+    export function sum(it: IterableOrIterator<number>): number {
+        const iterator = getIterator(it);
+        let total = 0;
+        let result = iterator.next();
+        while (!result.done) {
+            total += result.value;
+            result = iterator.next();
+        }
+        return total;
+    }
+
+    export function product(it: IterableOrIterator<number>): number {
+        const iterator = getIterator(it);
+        let total = 1;
+        let result = iterator.next();
+        while (!result.done) {
+            total *= result.value;
+            result = iterator.next();
+        }
+        return total;
+    }
 }
